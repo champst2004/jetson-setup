@@ -34,8 +34,17 @@ if [ $? -eq 0 ]; then ok "GDM stopped"; else err "GDM stop failed (may not be ru
 sudo pkill -9 Xorg 2>&1
 if [ $? -eq 0 ]; then ok "Xorg killed"; else ok "No Xorg process found (already clean)"; fi
 
-# Wait for Xorg to fully exit then clean stale locks
-sleep 2
+# Wait for Xorg to fully exit (max 10 seconds)
+echo "    Waiting for Xorg to exit..."
+for i in $(seq 1 10); do
+    if ! pgrep -x Xorg > /dev/null 2>&1; then
+        ok "Xorg fully exited"
+        break
+    fi
+    sleep 1
+done
+
+# Clean stale lock files
 if [ -f /tmp/.X0-lock ]; then
     sudo rm -f /tmp/.X0-lock
     sudo rm -f /tmp/.X11-unix/X0
@@ -55,15 +64,24 @@ else
 fi
 
 XINIT_PID=$!
-sleep 4
 
-if ps -p $XINIT_PID > /dev/null 2>&1; then
-    ok "X server started (PID $XINIT_PID)"
-else
+# Wait for X to be ready (max 10 seconds)
+echo "    Waiting for X server to be ready..."
+for i in $(seq 1 10); do
+    if xdpyinfo -display :0 > /dev/null 2>&1; then
+        ok "X server ready"
+        break
+    fi
+    sleep 1
+done
+
+if ! ps -p $XINIT_PID > /dev/null 2>&1; then
     err "X server failed to start — check ~/.local/share/xorg/Xorg.0.log"
     grep -iE "\(EE\)" ~/.local/share/xorg/Xorg.0.log 2>/dev/null | tail -5
     exit 1
 fi
+
+ok "X server started (PID $XINIT_PID)"
 
 # ─── Step 3: DISPLAY + screensaver ────────────────────────
 echo ""
