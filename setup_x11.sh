@@ -5,8 +5,8 @@ RED='\033[0;31m'
 CYAN='\033[0;36m'
 NC='\033[0m'
 
-ok()  { echo -e "${GREEN}[OK]${NC} $1"; }
-err() { echo -e "${RED}[ERROR]${NC} $1"; }
+ok()   { echo -e "${GREEN}[OK]${NC} $1"; }
+err()  { echo -e "${RED}[ERROR]${NC} $1"; }
 info() { echo -e "${CYAN}[INFO]${NC} $1"; }
 
 # ─── Menu ─────────────────────────────────────────────────
@@ -25,7 +25,7 @@ case $choice in
     *) err "Invalid option. Please enter 1 or 2."; exit 1 ;;
 esac
 
-# ─── Step 1 (common) ──────────────────────────────────────
+# ─── Step 1 ───────────────────────────────────────────────
 echo ""
 echo "==> Step 1: Stopping display manager and killing Xorg..."
 sudo service gdm stop 2>&1
@@ -34,18 +34,26 @@ if [ $? -eq 0 ]; then ok "GDM stopped"; else err "GDM stop failed (may not be ru
 sudo pkill -9 Xorg 2>&1
 if [ $? -eq 0 ]; then ok "Xorg killed"; else ok "No Xorg process found (already clean)"; fi
 
+# Clean up stale X lock files
+sleep 1
+if [ -f /tmp/.X0-lock ]; then
+    sudo rm -f /tmp/.X0-lock
+    sudo rm -f /tmp/.X11-unix/X0
+    ok "Removed stale X lock files"
+fi
+
 # ─── Step 2: Start X server ───────────────────────────────
 echo ""
 echo "==> Step 2: Starting X server..."
 
 if [ "$choice" = "1" ]; then
-    sudo xinit &
+    xinit -- :0 vt7 -sharevts -novtswitch &
 else
     cd /etc/X11 && xinit -- :0 vt7 -sharevts -novtswitch -config xorg.conf.pci &
 fi
 
 XINIT_PID=$!
-sleep 3
+sleep 4
 
 if ps -p $XINIT_PID > /dev/null 2>&1; then
     ok "X server started (PID $XINIT_PID)"
