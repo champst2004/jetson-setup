@@ -53,6 +53,15 @@ else
     ok "No stale lock files found"
 fi
 
+# ─── Step 1.5: Fix Xwrapper.config ───────────────────────
+echo ""
+echo "==> Step 1.5: Ensuring Xwrapper.config is correct..."
+sudo bash -c 'cat > /etc/X11/Xwrapper.config << EOF
+allowed_users=anybody
+needs_root_rights=yes
+EOF'
+if [ $? -eq 0 ]; then ok "Xwrapper.config set correctly"; else err "Failed to update Xwrapper.config"; exit 1; fi
+
 # ─── Step 2: Start X server ───────────────────────────────
 echo ""
 echo "==> Step 2: Starting X server..."
