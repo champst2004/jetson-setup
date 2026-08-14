@@ -34,12 +34,14 @@ if [ $? -eq 0 ]; then ok "GDM stopped"; else err "GDM stop failed (may not be ru
 sudo pkill -9 Xorg 2>&1
 if [ $? -eq 0 ]; then ok "Xorg killed"; else ok "No Xorg process found (already clean)"; fi
 
-# Clean up stale X lock files
-sleep 1
+# Wait for Xorg to fully exit then clean stale locks
+sleep 2
 if [ -f /tmp/.X0-lock ]; then
     sudo rm -f /tmp/.X0-lock
     sudo rm -f /tmp/.X11-unix/X0
     ok "Removed stale X lock files"
+else
+    ok "No stale lock files found"
 fi
 
 # ─── Step 2: Start X server ───────────────────────────────
