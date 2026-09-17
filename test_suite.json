@@ -1,0 +1,72 @@
+{
+    "deqp-vk": {
+        "x11_glx": {
+            "default": {
+                "cmd": "sudo DISPLAY=:0 l4t_64/deqp-vk --deqp-caselist-file=vk-default.txt --deqp-log-images=disable --deqp-log-shader-sources=disable",
+                "source": "//sw/apps/gpu/drivers/vulkan/khronos/vulkan-cts/1.4.6.0"
+            }
+        },
+        "wayland": {
+            "default": {
+                "cmd": "sudo XDG_RUNTIME_DIR=/tmp/xdgruntime l4t_64/deqp-vk --deqp-caselist-file=vk-default.txt --deqp-log-images=disable --deqp-log-shader-sources=disable",
+                "source": "//sw/apps/gpu/drivers/vulkan/khronos/vulkan-cts/1.4.6.0"
+            }
+        }
+    },
+    "cts_gl46": {
+        "x11_glx": {
+            "default": {
+                "cmd": "sudo DISPLAY=:0 l4t_64/x11_glx/cts-runner --type=gl46",
+                "source": "//sw/apps/gpu/drivers/opengl/khronos/opengl/4.6.4.1"
+            }
+        },
+        "wayland": {
+            "default": {
+                "cmd": "sudo XDG_RUNTIME_DIR=/tmp/xdgruntime l4t_64/wayland/cts-runner --type=gl46",
+                "source": "//sw/apps/gpu/drivers/opengl/khronos/opengl/4.6.4.1"
+            }
+        },
+        "x11_egl": {
+            "default": {
+                "cmd": "sudo DISPLAY=:0 l4t_64/x11_egl/cts-runner --type=gl46",
+                "source": "//sw/apps/gpu/drivers/opengl/khronos/opengl/4.6.4.1"
+            }
+        }
+    },
+    "cts_es32": {
+        "x11_glx": {
+            "default": {
+                "cmd": "sudo DISPLAY=:0 l4t_64/x11_glx/cts-runner --type=es32",
+                "source": "//sw/apps/gpu/drivers/opengl/khronos/opengl_es/3.2.10.1"
+            }
+        },
+        "wayland": {
+            "default": {
+                "cmd": "sudo XDG_RUNTIME_DIR=/tmp/xdgruntime l4t_64/wayland/cts-runner --type=es32",
+                "source": "//sw/apps/gpu/drivers/opengl/khronos/opengl_es/3.2.10.1"
+            }
+        },
+        "x11_egl": {
+            "default": {
+                "cmd": "sudo DISPLAY=:0 l4t_64/x11_egl/cts-runner --type=es32",
+                "source": "//sw/apps/gpu/drivers/opengl/khronos/opengl_es/3.2.10.1"
+            }
+        }
+    },
+    "deqp-vksc": {
+        "x11_glx": {
+            "t194": {
+                "cmd": "sudo DISPLAY=:0 ./deqp-vksc --deqp-pipeline-compiler=/home/ubuntu/pcc --deqp-subprocess-test-count=512 --deqp-pipeline-dir=/tmp --deqp-log-flush=disable --deqp-log-images=disable --deqp-log-shader-sources=disable --deqp-shadercache=disable --deqp-pipeline-args=\"-chip gv11b\" --deqp-command-pool-min-size=1500000 --deqp-caselist-file=vksc-default.txt",
+                "source": "//sw/apps/gpu/drivers/vulkansc/khronos/vulkansc-cts/1.0.2.0/l4t_64/x11_glx"
+            },
+            "t234": {
+                "cmd": "sudo DISPLAY=:0 ./l4t_64/x11_glx/deqp-vksc --deqp-pipeline-compiler=/usr/bin/pcc --deqp-subprocess-test-count=32 --deqp-pipeline-dir=/tmp --deqp-log-flush=disable --deqp-log-images=disable --deqp-log-shader-sources=disable --deqp-shadercache=disable --deqp-pipeline-args=\"-chip ga10b\" --deqp-command-pool-min-size=1500000 --deqp-caselist-file=vksc-default.txt",
+                "source": "//sw/apps/gpu/drivers/vulkansc/khronos/vulkansc-cts/1.0.2.1"
+            },
+            "t264": {
+                "cmd": "sudo DISPLAY=:0 ./l4t_64/x11_glx/deqp-vksc --deqp-pipeline-compiler=/usr/bin/pcc --deqp-subprocess-test-count=512 --deqp-pipeline-dir=/tmp --deqp-log-flush=disable --deqp-log-images=disable --deqp-log-shader-sources=disable --deqp-shadercache=disable --deqp-pipeline-args=\"-chip gb10b\" --deqp-command-pool-min-size=1500000 --deqp-caselist-file=vksc-default.txt",
+                "source": "//sw/apps/gpu/drivers/vulkansc/khronos/vulkansc-cts/1.0.2.1"
+            }
+        }
+    }
+}
